@@ -10,4 +10,10 @@ main: main.cpp $(OBJ)
 alphabet.o: functions.cpp
 	$(CC) -c -o functions.o functions.cpp $(CFLAGS)
 clean:
+ifneq ($(OS),Windows_NT)
 	rm -f main *.o
+else
+	rm main.exe *.o
+endif
+
+	
