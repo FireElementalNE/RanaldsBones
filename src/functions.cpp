@@ -22,6 +22,7 @@ void print_usage(char * argv0) {
 	cout << "\t-t number of tomes (MAX 3)" << endl;
 	cout << "\t-g number of grimoires (MAX 2)" << endl;
 	cout << "\t-b number of bonus dice (MAX 2)" << endl;
+	cout << "\t-q quiet mode, will just print result" << endl;
 	exit(EXIT_SUCCESS);
 }
 int safe_atoi(char * arg) {
@@ -78,33 +79,42 @@ int roll(double cutoff) {
 	}
 	return 0;
 }
-int roll_dice_helper(int total, string name, int count, double cutoff) {
+int roll_dice_helper(int total, string name, int count, double cutoff, bool quiet) {
 	for(int i = 0; i < count; i++) {
 		int roll_val = roll(cutoff);
-		if(roll_val) {
-			cout << "> S";
+		if(!quiet) {
+			if(roll_val) {
+				cout << "> S";
+			}
+			else {
+				cout << "> F";
+			}
+			cout << " for " << name << " #" << i+1 <<endl; 
 		}
-		else {
-			cout << "> F";
-		}
-		cout << " for " << name << " #" << i+1 <<endl; 
 		total += roll_val;
 	}
 	return total;
 }
-void roll_dice(int t, int g, int b) {
+void roll_dice(int t, int g, int b, bool quiet) {
 	int total = 0;
 	int d = DICE_COUNT - t - g - b; 
-	cout << "Dice pool is:" << endl;
-	cout << " " << t << " Tome(s)" << endl;
-	cout << " " << g << " Grimoire(s)" << endl;
-	cout << " " << b << " Bonus Dice" << endl;
-	cout << " " << d << " Regular Dice" << endl;
-	cout << "-------------------" << endl;
-	total = roll_dice_helper(total, "Tome", t, TCUTOFF);
-	total = roll_dice_helper(total, "Grimoire", g, MAX_ROLL);
-	total = roll_dice_helper(total, "Bonus Dice", b, BCUTOFF);
-	total = roll_dice_helper(total, "Regular Dice", d, NCUTOFF);
-	cout << "-------------------" << endl;
-	cout << "Total is " << total << endl;
+	if(!quiet) {
+		cout << "Dice pool is:" << endl;
+		cout << " " << t << " Tome(s)" << endl;
+		cout << " " << g << " Grimoire(s)" << endl;
+		cout << " " << b << " Bonus Dice" << endl;
+		cout << " " << d << " Regular Dice" << endl;
+		cout << "-------------------" << endl;
+	}
+	total = roll_dice_helper(total, "Tome", t, TCUTOFF, quiet);
+	total = roll_dice_helper(total, "Grimoire", g, MAX_ROLL, quiet);
+	total = roll_dice_helper(total, "Bonus Dice", b, BCUTOFF, quiet);
+	total = roll_dice_helper(total, "Regular Dice", d, NCUTOFF, quiet);
+	if(!quiet) {
+		cout << "-------------------" << endl;
+		cout << "Total is " << total << endl;
+	}
+	else {
+		cout << total << endl;
+	}
 }
