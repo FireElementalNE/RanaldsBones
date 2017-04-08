@@ -37,9 +37,10 @@ Notes
 * A Lua version has been added, since Vermintide is written in Lua  
 (using [Autodesk Stingray](https://en.wikipedia.org/wiki/Bitsquid)).  
 
-It is possible that the RNG is seeded this way:
+~~It is possible that the RNG is seeded this way:~~
 ```Lua
 math.randomseed(os.time())
 ```
-This is only accurate to single seconds. Two successive calls within  
-one second of each other will produce the same result.
+~~This is only accurate to single seconds. Two successive calls within~~
+~~one second of each other will produce the same result.~~
+Vermintide does not work this way
